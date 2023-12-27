@@ -1,0 +1,26 @@
+name: Deploy Next.js to EC2
+
+ on:
+   push:
+     branches:
+       - main # Change this to your branch name
+
+ jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Executing remote ssh commands using ssh key
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST_DNS }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            cd /var/www/DyshezWeb
+            sudo git config --global --add safe.directory /var/www/DyshezWeb 
+            sudo git pull https://development-espark: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@github.com/Dyshez/DyshezWeb.git staging 
+            sudo npm i 
+            sudo npm run build 
+            pm2 delete 0
+            pm2 start "npm start" --name nextjs
