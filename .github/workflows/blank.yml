@@ -1,11 +1,11 @@
 name: Deploy Next.js to EC2
 
- on:
+on:
    push:
      branches:
        - main # Change this to your branch name
 
- jobs:
+jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
